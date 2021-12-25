@@ -1,4 +1,4 @@
 package Entity;
 
-public class SystemManager {
+public class SystemManager extends Employee{
 }

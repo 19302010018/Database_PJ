@@ -6,6 +6,7 @@ public class main {
     private static final String username = "root";
     private static final String password = "12345Aa?";
     private static final String url ="jdbc:mysql://47.101.188.143:3306/dbpj";
+
     public static void main(String[] args) {
 
 
