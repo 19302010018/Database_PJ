@@ -9,10 +9,164 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 
 public class Employee {
+
+    String employeeID;
+    String employeeName;
+    String sex;
+    int age;
+    Date entryTime;
+    String address;
+    String telephone;
+    String email;
+    Connection conn;
+
+    public Employee() {
+
+    }
+
+    public String getEmployeeID() {
+        return employeeID;
+    }
+
+    public void setEmployeeID(String employeeID) {
+        this.employeeID = employeeID;
+    }
+
+    public String getEmployeeName() {
+        return employeeName;
+    }
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Date getEntryTime() {
+        return entryTime;
+    }
+
+    public void setEntryTime(Date entryTime) {
+        this.entryTime = entryTime;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeID='" + employeeID + '\'' +
+                ", employeeName='" + employeeName + '\'' +
+                ", sex='" + sex + '\'' +
+                ", age=" + age +
+                ", entryTime=" + entryTime +
+                ", address='" + address + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
+    public Employee(Connection conn, String name){
+        this.conn = conn;
+        String sql = SqlSentence.GET_EMPLOYEE_BY_EMPLOYEE_NAME + "'" + name + "'";
+        PreparedStatement pstmt;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                this.employeeID = rs.getString("employeeID").trim();
+                this.employeeName = rs.getString("employeeName").trim();
+                this.sex = rs.getString("sex").trim();
+                this.age = rs.getInt("age");
+                this.address = rs.getString("address").trim();
+                this.entryTime = rs.getDate("entryTime");
+                this.telephone = rs.getString("telephone").trim();
+                this.email = rs.getString("email").trim();
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+//        System.out.println(this.toString());
+    }
+
+    public Employee(String employeeID, String employeeName, String sex, int age, Date entryTime, String address, String telephone, String email) {
+        this.employeeID = employeeID;
+        this.employeeName = employeeName;
+        this.sex = sex;
+        this.age = age;
+        this.entryTime = entryTime;
+        this.address = address;
+        this.telephone = telephone;
+        this.email = email;
+    }
+
+    public static Employee getEmployee(Connection conn,String employeeID){
+        Employee employee = new Employee();
+        String sql = "select * from employee where employeeID = '" + employeeID + "'";
+        PreparedStatement pstmt;
+        try {
+            pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                employee.employeeID = rs.getString("employeeID").trim();
+                employee.employeeName = rs.getString("employeeName").trim();
+                employee.sex = rs.getString("sex").trim();
+                employee.age = rs.getInt("age");
+                employee.address = rs.getString("address").trim();
+                employee.entryTime = rs.getDate("entryTime");
+                employee.telephone = rs.getString("telephone").trim();
+                employee.email = rs.getString("email").trim();
+            }
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return employee;
+    }
 
     //员工维护个人信息
     public static void updateEmployeeMsg(Connection conn, String employeeID, HashMap msgs) {
@@ -102,28 +256,6 @@ public class Employee {
         }
     }
 
-    public static String getEmployeeIDByName(Connection conn, String employeeName) {
-        String employeeID = "";
-        System.out.println("正在查找本部门中" + employeeName + "的员工ID");
-        String sql = SqlSentence.GET_ID_BY_EMPLOYEE_NAME + "'" + employeeName + "'";
-//        System.out.println(sql);
-        PreparedStatement pstmt;
-        try {
-            pstmt = conn.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                employeeID = rs.getString("employeeID").trim();
-            }
-
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-//        System.out.println(employeeID);
-        return employeeID;
-
-    }
-
     public static String getEmployeeNameByID(Connection conn, String employeeID) {
         String employeeName = "";
         System.out.println("正在查找本部门中" + employeeID + "的员工姓名");
@@ -174,9 +306,10 @@ public class Employee {
 
     }
 
-    public static int executeSQL(Connection conn, String sql) {
+    public static ArrayList<Employee> executeSQL(Connection conn, String sql) {
         int num = 0;
         PreparedStatement pstmt;
+        ArrayList<Employee> list = new ArrayList<>();
         try {
             pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
@@ -187,26 +320,23 @@ public class Employee {
                 String employeeName = rs.getString("employeeName").trim();
                 String sex = rs.getString("sex").trim();
                 int age = rs.getInt("age");
-                String entryTime = rs.getString("entryTime").trim();
+                Date entryTime = rs.getDate("entryTime");
                 String address = rs.getString("address").trim();
                 String telephone = rs.getString("telephone").trim();
                 String email = rs.getString("email").trim();
 
-                System.out.println(employeeID + "  |  " +
-                        employeeName + "  |  " +
-                        sex + "  |  " +
-                        age + "  |  " +
-                        entryTime + "  |  " +
-                        address + "  |  " +
-                        telephone + "  |  " +
-                        email);
+                Employee employee = new Employee(employeeID,employeeName,sex,age,entryTime,address,telephone,email);
+                System.out.println(employee.toString());
+
+                list.add(employee);
+
             }
 
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return num;
+        return list;
     }
 
     public static ArrayList<String> getEmployeeIDByDepartmentID(Connection conn, String departmentID) {

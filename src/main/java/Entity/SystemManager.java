@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class SystemManager extends Teacher {
+
+    public SystemManager(Connection conn, String name) {
+        super(conn, name);
+    }
+
     //增加employee
     public static void addEmployee(Connection conn, String employeeID, String employeeName,
                                    String sex, int age, String entryTime, String address,
@@ -145,7 +150,23 @@ public class SystemManager extends Teacher {
 
     }
 
-    //查改employee信息直接调用父类方法就行
+
+    public static Employee getEmployeeByName(Connection conn,String employeeName){
+        return new Employee(conn,employeeName);
+    }
+    public static Employee getEmployeeById(Connection conn,String employeeID){
+        return getEmployee(conn,employeeID);
+    }
+
+    /**
+     * 修改员工信息
+     * @param conn
+     * @param employeeID
+     * @param msgs
+     */
+    public static void alterEmployee(Connection conn,String employeeID, HashMap msgs){
+        updateEmployeeMsg(conn,employeeID,msgs);
+    }
 
     //增加course信息调用teacher方法
 

@@ -13,6 +13,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Teacher extends Employee {
+    public Teacher(Connection conn, String name) {
+        super(conn, name);
+    }
+
     public static void getStudents(Connection conn, String teacherID) {
         ArrayList<String> courses = getCourses(conn, teacherID);
         ArrayList<String> departmentIDs = new ArrayList<>();
@@ -68,16 +72,18 @@ public class Teacher extends Employee {
         return courses;
     }
 
-    public static void getEmployeeMsgByID(Connection conn, String departmentID, String employeeID) {
+    public static ArrayList<Employee> getEmployeeMsgByID(Connection conn, String departmentID, String employeeID) {
         System.out.println("正在查找本部门中ID为" + employeeID + "的员工信息");
         HashMap limits = new HashMap();
         limits.put("departmentID", departmentID);
         limits.put("employeeID", employeeID);
         String sql = SqlSentence.EMPLOYEE_MSG_EVERY + SqlSentence.whereClauseGenerator(limits);
-        int num = executeSQL(conn, sql);
+        ArrayList<Employee> list = executeSQL(conn, sql);
+        int num = list.size();
         if (num == 0) {
             System.out.println("对不起，没有查到相关信息");
         }
+        return list;
     }
 
     //给学生登分

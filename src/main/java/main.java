@@ -1,16 +1,8 @@
 import java.sql.*;
 import java.util.HashMap;
-import java.util.Map;
 
-import Entity.Course;
 import Entity.Employee;
-import Entity.SystemManager;
-import Entity.Teacher;
-import Relation.Take;
-import Relation.Teach;
-import Util.SqlSentence;
-import com.sun.xml.internal.ws.message.EmptyMessageImpl;
-import org.apache.ibatis.jdbc.ScriptRunner;
+import Entity.Manager;
 
 public class Main {
     private static final String username = "root";
@@ -34,7 +26,14 @@ public class Main {
 
 
             conn = DriverManager.getConnection(url, username, password);
-            SystemManager.getCourseMsg(conn,"35142");
+//            Employee testEmployee = new Employee(conn,"李耀");
+
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("pass",true);
+//            map.put("courseID","35142");
+            Manager.getTakes(conn,map,"10");
+
+//            SystemManager.getCourseMsg(conn,"35142");
 //            SystemManager.updateCourse(conn, "35142", "数据库设计2", "新type", "sajbdhjhfusdh fsdfk");
 //            Teacher.addCourse(conn,"a","aa","aaa","asasa","2",0 );
 
