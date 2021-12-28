@@ -1,10 +1,13 @@
 package Util;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
 public class SqlSentence {
+
+
     public static final String EMPLOYEE_MSG_EVERY = "select * from employee natural join employeeBelong ";
     public static final String COURSE_MSG_EVERY = "select * from course natural join courseBelong ";
     public static final String GET_COURSES_BY_TEACHER_ID = "select courseID from teach where teacherID=";
@@ -48,7 +51,9 @@ public class SqlSentence {
     public static final String SPECIFY_BY_SYLLABUS = "  syllabus= '";
     public static final String SPECIFY_BY_SEX = "  sex= '";
     public static final String SPECIFY_BY_ENTRY_TIME = "  entryTime= '";
-
+    public static final String SPECIFY_BY_TIME = "  time= '";
+    public static final String SPECIFY_BY_USERNAME = "  username= '";
+    public static final String SPECIFY_BY_OPETARION = "  operation= '";
 
     public static final String WHERE_KEY = " where ";
     public static final String AND_KEY = " and ";
@@ -57,7 +62,7 @@ public class SqlSentence {
     public static final String RIGHT_PARENTHESES_KEY = " ) ";
     public static final String STRING_POSTFIX = "'";
 
-    public static final String GET_ID_BY_EMPLOYEE_NAME = "select employeeID from employee  where employeeName=  ";
+    public static final String GET_EMPLOYEE_BY_EMPLOYEE_NAME = "select * from employee  where employeeName=  ";
     public static final String GET_NAME_BY_EMPLOYEE_ID = "select employeeName from employee  where employeeID=  ";
     public static final String GET_TEACH_TIME_BY_ID = "select * from teacher where employeeID=";
     public static final String CHECK_IS_TEACHER = "select * from teacher";
@@ -75,6 +80,11 @@ public class SqlSentence {
     public static final String DELETE_MANAGER="delete from manager where employeeID=";
 
 
+    public static final String UPDATE_DEPARTMENT = "update employeeBelong set departmentID = ";
+    public static final String GET_TAKE_BY_EMPLOYEE_ID = "select * from take where employeeID = ";
+    public static final String INSERT_LOG = "insert into log values ";
+
+
     public static String whereClauseGenerator(HashMap limits) {
         return WHERE_KEY + sqlGenerator(limits, AND_KEY);
     }
@@ -82,7 +92,6 @@ public class SqlSentence {
     public static String updateClauseGenerator(HashMap limits) {
         return sqlGenerator(limits, COMMA_KEY);
     }
-
 
     public static String insertClauseGenerator(LinkedHashMap msgs) {
         StringBuilder sql = new StringBuilder();
@@ -164,8 +173,15 @@ public class SqlSentence {
                 case "entryTime":
                     sql.append(SPECIFY_BY_ENTRY_TIME).append(limits.get(key)).append(STRING_POSTFIX);
                     break;
-
-
+                case "username":
+                    sql.append(SPECIFY_BY_USERNAME).append(limits.get(key)).append(STRING_POSTFIX);
+                    break;
+                case "operation":
+                    sql.append(SPECIFY_BY_OPETARION).append(limits.get(key)).append(STRING_POSTFIX);
+                    break;
+                case "time":
+                    sql.append(SPECIFY_BY_TIME).append(limits.get(key)).append(STRING_POSTFIX);
+                    break;
                 default:
                     break;
             }
@@ -177,6 +193,8 @@ public class SqlSentence {
         }
         return sql.toString();
     }
+
+
 
 
 }
