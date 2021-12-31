@@ -27,8 +27,6 @@ public class ManagerTranslator extends EmployeeTranslator{
                 "2. get score \n"+
                 "3. get course \n"+
                 "4. update me [age] [address] [telephone] [email] \n"+
-           //     "5. insert employee [] \n" +
-           //     "6. delete employee [employeeID] \n" +
                 "7. update employee [age] [address] [telephone] [email] \n" +
                 "8. get employee [employeeID/Name] \n" +
                 "9. get departmentCourse \n" +
