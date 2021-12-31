@@ -167,6 +167,10 @@ public class Employee {
         }
         return employee;
     }
+    public static boolean checkIsEmployee(Connection conn,String employeeID){
+        Employee employee = getEmployee(conn,employeeID);
+        return employee.getEmployeeID() != null;
+    }
 
     //员工维护个人信息
     public static void updateEmployeeMsg(Connection conn, String employeeID, HashMap msgs) {

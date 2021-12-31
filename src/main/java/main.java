@@ -1,8 +1,10 @@
 import java.sql.*;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import Entity.Employee;
 import Entity.Manager;
+import Util.*;
 
 public class Main {
     private static final String username = "root";
@@ -26,49 +28,8 @@ public class Main {
 
 
             conn = DriverManager.getConnection(url, username, password);
-//            Employee testEmployee = new Employee(conn,"李耀");
 
-            HashMap<String,Object> map = new HashMap<>();
-            map.put("pass",true);
-//            map.put("courseID","35142");
-            Manager.getTakes(conn,map,"10");
-
-//            SystemManager.getCourseMsg(conn,"35142");
-//            SystemManager.updateCourse(conn, "35142", "数据库设计2", "新type", "sajbdhjhfusdh fsdfk");
-//            Teacher.addCourse(conn,"a","aa","aaa","asasa","2",0 );
-
-//            System.out.println(Employee.checkIsTeacher(conn,"10231106004"));
-//            System.out.println(Employee.checkIsManager(conn,"10231106004"));
-//            SystemManager.addEmployee(conn, "22222222222", "张二",
-//                    "男", 21, "2021-11-23", "北京", "11111111110"
-//                    , "example@yy.com","2");
-//            System.out.println(Teach.getTeacherIDByCourseID(conn,"35155"));
-//            Employee.checkCourses(conn,"10231106003");
-//            Employee.checkGrades(conn,"10231106003");
-//            Take.registerGrades(conn, "10231106002", "35155", 50);
-
-//            Take.autoAssignMandatoryCourse(conn);
-//            Course.getCourseMsg(conn,"10");
-//            System.out.println(Teacher.getCourses(conn,"10231106124"));
-//            Teacher.getStudents(conn,"10231106124");
-
-//            Take.assignCoursesByEmployeeID(conn, "10231106003", "35142");
-//            Take.assignCoursesByEmployeeName(conn, "王鑫", "35142");
-//            ScriptRunner runner = new ScriptRunner(conn);
-//
-//            Employee.getEmployeeMsg(conn, "10");
-//            System.out.println();
-//            Employee.getEmployeeMsgByID(conn, "10", "10231106003");
-//            System.out.println();
-//            Employee.getEmployeeMsgByName(conn, "10", "蒋玥");
-//            HashMap msgs = new HashMap();
-//            msgs.put("age", 6);
-//            msgs.put("address","贵州");
-//            msgs.put("telephone","11111111111");
-//            msgs.put("email","example@yy.com");
-//
-//            Employee.updateEmployeeMsg(conn,"10231106003",msgs);
-//            Employee.getEmployeeMsg(conn, "10");
+            SystemStart(conn);
 
 
         } catch (Exception e) {
@@ -77,6 +38,65 @@ public class Main {
         }
 
     }
+
+    static void SystemStart(Connection conn) {
+
+        System.out.println("欢迎登录员工管理系统");
+        System.out.println("请输入你的用户名与密码");
+        System.out.println("由于系统在测试阶段，且pj里没要求，这次就输入用户名就可以啦");
+
+        Scanner input = new Scanner(System.in);
+        String employeeID = "";
+
+
+        while (!employeeID.equals("exit")) {
+            employeeID = input.nextLine();
+            ArgTranslator argTranslator = null;
+            switch (employeeID) {
+                case "admin":
+                    argTranslator = new SystemManagerTranslator(employeeID,conn);
+                    break;
+                default:
+                    if (Employee.checkIsEmployee(conn, employeeID)) {
+                        argTranslator = new EmployeeTranslator(employeeID,conn);
+                        boolean isManager = Employee.checkIsManager(conn, employeeID);
+                        boolean isTeacher = Employee.checkIsTeacher(conn, employeeID);
+                        boolean isBoth = isManager && isTeacher;
+                        if (isBoth) {
+                            argTranslator = new TeacherAndManagerTranslator(employeeID,conn);
+                        } else if (isTeacher) {
+                            argTranslator = new TeacherTranslator(employeeID,conn);
+                        } else if (isManager){
+                            argTranslator = new ManagerTranslator(employeeID,conn);
+                        }
+
+                    }
+                    break;
+            }
+
+            if (argTranslator != null) {
+                executeCmds(conn,argTranslator);
+                break;
+            }else {
+                System.out.println("错误的用户名哦！Try again！");
+            }
+        }
+        System.out.println("Bye~");
+
+
+    }
+
+
+    static void executeCmds(Connection conn,ArgTranslator argTranslator){
+        System.out.println("欢迎光临！开用！");
+        Scanner input = new Scanner(System.in);
+        String inputLine = "";
+        while(!inputLine.equals("exit")){
+            inputLine = input.nextLine();
+            argTranslator.translate(inputLine);
+        }
+    }
+
 
 }
 
