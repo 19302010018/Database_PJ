@@ -13,12 +13,20 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Teacher extends Employee {
+
     public Teacher(Connection conn, String name) {
         super(conn, name);
     }
 
+
+
     public static void getStudents(Connection conn, String teacherID) {
-        ArrayList<String> courses = getCourses(conn, teacherID);
+        ArrayList<Course> courseArrayList = Teacher.getCourses(conn, teacherID);
+        ArrayList<String> courses = new ArrayList<>();
+        for(Course course:courseArrayList){
+            courses.add(course.getCourseID());
+        }
+
         ArrayList<String> departmentIDs = new ArrayList<>();
 
         System.out.println("正在查找" + teacherID + "教授的所有学生的信息");
@@ -51,24 +59,25 @@ public class Teacher extends Employee {
 
 
     //获取这个老师教的所有课程
-    public static ArrayList<String> getCourses(Connection conn, String teacherID) {
-        ArrayList<String> courses = new ArrayList<>();
+    public static ArrayList<Course> getCourses(Connection conn, String teacherID) {
+        ArrayList<Course> courses = new ArrayList<>();
         System.out.println("正在查找" + teacherID + "教授的所有课程");
         String sql = SqlSentence.GET_COURSES_BY_TEACHER_ID + "'" + teacherID + "'";
-//        System.out.println(sql);
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                courses.add(rs.getString("courseID").trim());
+
+                Course course = new Course(conn,rs.getString("courseID").trim());
+                courses.add(course);
             }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-//        System.out.println(employeeID);
+
         return courses;
     }
 
@@ -150,13 +159,16 @@ public class Teacher extends Employee {
         msgs3.put("teacherID",teacherID);
         msgs3.put("courseID", courseID);
 
-        String sql3 = SqlSentence.ADD_COURSE_BELONG + SqlSentence.insertClauseGenerator(msgs3);
+        String sql3 = SqlSentence.ADD_TEACH + SqlSentence.insertClauseGenerator(msgs3);
+//        System.out.println(sql3);
         try {
             PreparedStatement pstmt3 = conn.prepareStatement(sql3);
             pstmt3.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
+        System.out.println("成功了哦！");
 
     }
 }

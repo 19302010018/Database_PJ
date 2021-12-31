@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class SystemManager extends Teacher {
+public class SystemManager extends Employee {
 
     public SystemManager(Connection conn, String name) {
         super(conn, name);
@@ -105,7 +105,11 @@ public class SystemManager extends Teacher {
                 throwables.printStackTrace();
             }
             //老师删相关course表
-            ArrayList<String> courses = Teacher.getCourses(conn, employeeID);
+            ArrayList<Course> courseArrayList = Teacher.getCourses(conn, employeeID);
+            ArrayList<String> courses = new ArrayList<>();
+            for(Course course:courseArrayList){
+                courses.add(course.getCourseID());
+            }
             for (int i = 0; i < courses.size(); i++) {
                 String deleteCourse = SqlSentence.DELETE_COURSE + "'" + courses.get(i) + "'";
                 try {

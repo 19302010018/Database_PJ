@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.util.HashMap;
 
 public class EmployeeTranslator extends ArgTranslator{
-    //TODO 维护个人信息（改查自己的） 查Take和Teach和Teacher 查成绩
 
     /**
      *
@@ -83,12 +82,18 @@ public class EmployeeTranslator extends ArgTranslator{
         Employee.checkCourses(conn,me.getEmployeeID());
     }
 
-    public void update(String[] detail){
+    public void updateMyDetail(String[] args,int flag){
         HashMap<String,String> map = new HashMap();
-        map.put("age",detail[1]);
-        map.put("address",detail[2]);
-        map.put("telephone",detail[3]);
-        map.put("email",detail[4]);
+        map.put("age",args[flag++]);
+        map.put("address",args[flag++]);
+        map.put("telephone",args[flag++]);
+        map.put("email",args[flag]);
         Employee.updateEmployeeMsg(conn,me.getEmployeeID(),map);
+        me = Employee.getEmployee(conn,me.getEmployeeID());
+    }
+
+
+    public void update(String[] args){
+        updateMyDetail(args,1);
     }
 }
