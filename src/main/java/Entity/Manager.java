@@ -166,6 +166,13 @@ public class Manager extends Employee {
                     continue;
                 }
             }
+            if(limits.containsKey("type")){
+                Course course = new Course(conn,i.getCourseID());
+                if(!course.getType().equals(limits.get("type"))){
+                    takes.remove(i);
+                    continue;
+                }
+            }
 //            System.out.println(i.toString());
         }
        return takes;

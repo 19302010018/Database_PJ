@@ -19,11 +19,10 @@ public class Teacher extends Employee {
     }
 
 
-
     public static void getStudents(Connection conn, String teacherID) {
         ArrayList<Course> courseArrayList = Teacher.getCourses(conn, teacherID);
         ArrayList<String> courses = new ArrayList<>();
-        for(Course course:courseArrayList){
+        for (Course course : courseArrayList) {
             courses.add(course.getCourseID());
         }
 
@@ -70,7 +69,7 @@ public class Teacher extends Employee {
 
             while (rs.next()) {
 
-                Course course = new Course(conn,rs.getString("courseID").trim());
+                Course course = new Course(conn, rs.getString("courseID").trim());
                 courses.add(course);
             }
 
@@ -122,7 +121,7 @@ public class Teacher extends Employee {
 
     }
 
-    public static void addCourse(Connection conn, String teacherID,String courseID, String name, String type,
+    public static void addCourse(Connection conn, String teacherID, String courseID, String name, String type,
                                  String syllabus, String departmentID, int mandatory) {
         //增加course表
         LinkedHashMap msgs = new LinkedHashMap();
@@ -146,6 +145,10 @@ public class Teacher extends Employee {
         msgs2.put("departmentID", departmentID);
         msgs2.put("mandatory", mandatory);
 
+        if (mandatory == 1) {
+            autoAssignMandatoryCourse(conn);
+        }
+
         String sql2 = SqlSentence.ADD_COURSE_BELONG + SqlSentence.insertClauseGenerator(msgs2);
         try {
             PreparedStatement pstmt2 = conn.prepareStatement(sql2);
@@ -156,7 +159,7 @@ public class Teacher extends Employee {
 
         //增加teach表
         LinkedHashMap msgs3 = new LinkedHashMap();
-        msgs3.put("teacherID",teacherID);
+        msgs3.put("teacherID", teacherID);
         msgs3.put("courseID", courseID);
 
         String sql3 = SqlSentence.ADD_TEACH + SqlSentence.insertClauseGenerator(msgs3);

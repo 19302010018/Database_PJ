@@ -75,6 +75,7 @@ public class Main {
             }
 
             if (argTranslator != null) {
+                Employee.autoAssignMandatoryCourse(conn);
                 executeCmds(conn,argTranslator);
                 break;
             }else {

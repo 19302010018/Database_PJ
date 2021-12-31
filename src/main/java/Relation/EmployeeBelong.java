@@ -28,4 +28,11 @@ public class EmployeeBelong {
         }
     }
 
+    public String getEmployeeID() {
+        return employeeID;
+    }
+
+    public String getDepartmentID() {
+        return departmentID;
+    }
 }
