@@ -82,7 +82,7 @@ public class SqlSentence {
 
     public static final String UPDATE_DEPARTMENT = "update employeeBelong set departmentID = ";
     public static final String GET_TAKE_BY_EMPLOYEE_ID = "select * from take where employeeID = ";
-    public static final String INSERT_LOG = "insert into log values ";
+    public static final String INSERT_LOG = "insert into log (username,operation,time) values ";
 
 
     public static String whereClauseGenerator(HashMap limits) {

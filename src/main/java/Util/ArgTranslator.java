@@ -14,6 +14,9 @@ public class ArgTranslator {
 
     }
 
+    public String getEmployeeID() {
+        return employeeID;
+    }
 
     public void help(){
 

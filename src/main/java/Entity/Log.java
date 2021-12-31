@@ -62,14 +62,16 @@ public class Log {
         msgs.put("username", username);
         msgs.put("operation", operation);
         Date date = new Date();//获得系统时间.
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String nowTime = sdf.format(date);//将时间格式转换成符合Timestamp要求的格式.
         Timestamp dates =Timestamp.valueOf(nowTime);//把时间转换
-        msgs.put("time",dates);
+        msgs.put("time",dates.toString());
         String sql = SqlSentence.INSERT_LOG + SqlSentence.insertClauseGenerator(msgs);
+        System.out.println(sql);
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(sql);
+            pstmt.execute();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

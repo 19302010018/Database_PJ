@@ -81,7 +81,7 @@ public class ManagerTranslator extends EmployeeTranslator{
                 System.out.println(getEmployee(args[2]));
                 break;
             case "departmentCourse":
-                getDepartmentCourse(args[2]);
+                getDepartmentCourse();
                 break;
             case "employeeScore":
                 getEmployeeScore(args[2]);
@@ -120,7 +120,7 @@ public class ManagerTranslator extends EmployeeTranslator{
         }
 
     }
-    public void getDepartmentCourse(String arg){
+    public void getDepartmentCourse(){
         ArrayList<Course> courses = Manager.getCourseMsg(conn,departmentID);
         for(Course course:courses){
             System.out.println(course.toString());

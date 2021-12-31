@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import Entity.Employee;
+import Entity.Log;
 import Entity.Manager;
 import Util.*;
 
@@ -95,6 +96,7 @@ public class Main {
         String inputLine = "";
         while(!inputLine.equals("exit")){
             inputLine = input.nextLine();
+            Log log = new Log(conn,argTranslator.getEmployeeID(),inputLine);
             argTranslator.translate(inputLine);
         }
     }
