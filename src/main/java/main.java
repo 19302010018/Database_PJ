@@ -7,6 +7,7 @@ import Entity.Manager;
 import Util.*;
 
 public class Main {
+    //TODO 同名的员工不能用name的方式修改信息
     private static final String username = "root";
     private static final String password = "12345Aa?";
     private static final String url = "jdbc:mysql://47.101.188.143:3306/dbpj";
