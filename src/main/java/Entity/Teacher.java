@@ -171,4 +171,24 @@ public class Teacher extends Employee {
         System.out.println("成功了哦！");
 
     }
+
+    //修改course信息
+    public static void updateCourse(Connection conn, String courseID, String name, String type, String syllabus) {
+        HashMap limits = new HashMap();
+        limits.put("courseID", courseID);
+
+        HashMap msgs = new HashMap();
+        msgs.put("name", name);
+        msgs.put("type", type);
+        msgs.put("syllabus", syllabus);
+
+        String update = SqlSentence.UPDATE_COURSE_MSG + SqlSentence.updateClauseGenerator(msgs) + SqlSentence.whereClauseGenerator(limits);
+        System.out.println(update);
+        try {
+            PreparedStatement pstmt1 = conn.prepareStatement(update);
+            pstmt1.execute();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }

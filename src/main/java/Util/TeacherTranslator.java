@@ -5,6 +5,7 @@ import Entity.Employee;
 import Entity.Teacher;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TeacherTranslator extends EmployeeTranslator{
@@ -22,11 +23,12 @@ public class TeacherTranslator extends EmployeeTranslator{
                 "2. get score \n"+
                 "3. get course \n"+ //TODO get course 的nullpointer处理
                 "4. update me \n then input [age] [address] [telephone] [email]\n"+
-                "5. get students \n"+
-                "6. update score \n then input [studentID] [courseID] [score] \n"+
-                "7. get courses \n"+
-                "8. insert [courseID] [name] [type] [syllabus] [mandatory(必修填1否则填0)] \n"+
-                "9. exit"
+                "5. update course \n then input [courseID] [name] [type] [syllabus] [mandatory(必修填1否则填0)] "+
+                "6. get students \n"+
+                "7. update score \n then input [studentID] [courseID] [score] \n"+
+                "8. get courses \n"+
+                "9. insert [courseID] [name] [type] [syllabus] [mandatory(必修填1否则填0)] \n"+
+                "10. exit"
         );
     }
 
@@ -103,6 +105,9 @@ public class TeacherTranslator extends EmployeeTranslator{
             case "score":
                 updateScore(args,2);
                 break;
+            case "course":
+                updateCourse(args,2);
+                break;
         }
     }
 
@@ -112,6 +117,23 @@ public class TeacherTranslator extends EmployeeTranslator{
         }catch (Exception e){
             System.out.println("Wrong input format!Try again");
         }
+    }
+
+    public void updateCourse(String[] args,int flag){
+        String courseID = args[flag++];
+        String name = args[flag++];
+        String type = args[flag++];
+        String syllabus = args[flag++];
+//        int mandatory = Integer.parseInt(args[flag])==1?1:0;
+        ArrayList<Course> courses = Teacher.getCourses(conn,me.getEmployeeID());
+        for(Course course:courses){
+            if(courseID.equals(course.getCourseID())){
+                Teacher.updateCourse(conn,courseID,name,type,syllabus);
+                return;
+            }
+        }
+        System.out.println("手别伸这么长！不是你的课你别管！");
+
     }
 
     public void insert(String[] args){
